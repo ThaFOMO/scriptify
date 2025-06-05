@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scriptify Webhook Builder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #121212;
+      color: #eee;
+      margin: 0; padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    header {
+      width: 100%;
+      background: #1f1f1f;
+      padding: 15px 20px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+      color: #00ffa8;
+      user-select: none;
+      box-shadow: 0 3px 10px rgba(0,255,168,0.3);
+    }
+    main {
+      width: 90%;
+      max-width: 900px;
+      margin: 20px auto 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+    section {
+      background: #1e1e1e;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0,255,168,0.15);
+    }
+    section h2 {
+      margin: 0 0 15px;
+      font-weight: 600;
+      color: #00ffa8;
+      border-bottom: 2px solid #00ffa8;
+      padding-bottom: 6px;
+      user-select: none;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    input[type="text"], input[type="url"], input[type="color"], input[type="number"], textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: none;
+      font-size: 1rem;
+      background: #2a2a2a;
+      color: #eee;
+      resize: vertical;
+    }
+    textarea {
+      min-height: 60px;
+    }
+    .form-row {
+      margin-bottom: 15px;
+    }
+    button {
+      background: #00ffa8;
+      color: #121212;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      user-select: none;
+    }
+    button:hover {
+      background: #00cc7a;
+    }
+    .flex-row {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    .preview-box {
+      background: #000;
+      border-radius: 10px;
+      padding: 15px;
+      color: #eee;
+      max-height: 350px;
+      overflow-y: auto;
+      font-family: monospace;
+      white-space: pre-wrap;
+      user-select: text;
+      box-shadow: inset 0 0 8px #00ffa8;
+    }
+    .actions {
+      display: flex;
+      gap: 15px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    @media (max-width: 600px) {
+      main {
+        width: 95%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>SCRIPTIFY WEBHOOK BUILDER 💻🛒</header>
+  <main>
+    <!-- Main Embed Builder -->
+    <section id="main-builder">
+      <h2>Main Embed Builder</h2>
+      <div class="form-row">
+        <label for="main-title">Title</label>
+        <input type="text" id="main-title" placeholder="Embed title" />
+      </div>
+      <div class="form-row">
+        <label for="main-description">Description</label>
+        <textarea id="main-description" placeholder="Embed description"></textarea>
+      </div>
+      <div class="flex-row">
+        <div style="flex:1;">
+          <label for="main-color">Embed Color</label>
+          <input type="color" id="main-color" value="#00ffa8" />
+        </div>
+        <div style="flex:1;">
+          <label for="main-url">URL (optional)</label>
+          <input type="url" id="main-url" placeholder="https://example.com" />
+        </div>
+      </div>
+      <div class="form-row">
+        <label for="main-footer">Footer Text</label>
+        <input type="text" id="main-footer" placeholder="Footer text" />
+      </div>
+    </section>
+
+    <!-- Server Builder -->
+    <section id="server-builder">
+      <h2>Server Builder Tool</h2>
+      <div class="form-row">
+        <label for="server-name">Server Name</label>
+        <input type="text" id="server-name" placeholder="Example Server" />
+      </div>
+      <div class="form-row">
+        <label for="server-invite">Invite URL</label>
+        <input type="url" id="server-invite" placeholder="https://discord.gg/xyz" />
+      </div>
+      <div class="form-row">
+        <label for="server-description">Server Description</label>
+        <textarea id="server-description" placeholder="Describe your server"></textarea>
+      </div>
+      <div class="form-row">
+        <label for="server-image">Server Image URL</label>
+        <input type="url" id="server-image" placeholder="https://cdn.example.com/image.png" />
+      </div>
+    </section>
+
+    <!-- Custom Embed Builder -->
+    <section id="custom-embed">
+      <h2>Custom Embed Builder & Preview</h2>
+      <div class="form-row">
+        <label for="custom-title">Embed Title</label>
+        <input type="text" id="custom-title" placeholder="Custom embed title" />
+      </div>
+      <div class="form-row">
+        <label for="custom-description">Embed Description</label>
+        <textarea id="custom-description" placeholder="Custom embed description"></textarea>
+      </div>
+      <div class="flex-row">
+        <div style="flex:1;">
+          <label for="custom-color">Embed Color</label>
+          <input type="color" id="custom-color" value="#00ffa8" />
+        </div>
+        <div style="flex:1;">
+          <label for="custom-url">URL (optional)</label>
+          <input type="url" id="custom-url" placeholder="https://example.com" />
+        </div>
+      </div>
+      <div class="form-row">
+        <label for="custom-footer">Footer Text</label>
+        <input type="text" id="custom-footer" placeholder="Footer text" />
+      </div>
+
+      <button id="generate-json">Generate JSON & Preview</button>
+
+      <div class="preview-box" id="embed-preview" aria-live="polite" aria-atomic="true">
+        {/* Embed JSON preview appears here */}
+      </div>
+
+      <div class="actions">
+        <button id="copy-json">Copy JSON</button>
+        <button id="download-json">Download JSON</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Helper to build embed JSON object
+    function buildEmbed(title, description, color, url, footer) {
+      const embed = {};
+      if (title) embed.title = title;
+      if (description) embed.description = description;
+      if (color) {
+        // Convert hex to decimal for Discord API
+        embed.color = parseInt(color.replace('#', ''), 16);
+      }
+      if (url) embed.url = url;
+      if (footer) embed.footer = { text: footer };
+      return embed;
+    }
+
+    // Elements for custom embed builder
+    const customTitle = document.getElementById('custom-title');
+    const customDescription = document.getElementById('custom-description');
+    const customColor = document.getElementById('custom-color');
+    const customUrl = document.getElementById('custom-url');
+    const customFooter = document.getElementById('custom-footer');
+
+    const previewBox = document.getElementById('embed-preview');
+    const generateBtn = document.getElementById('generate-json');
+    const copyBtn = document.getElementById('copy-json');
+    const downloadBtn = document.getElementById('download-json');
+
+    function updatePreview() {
+      const embed = buildEmbed(
+        customTitle.value.trim(),
+        customDescription.value.trim(),
+        customColor.value,
+        customUrl.value.trim(),
+        customFooter.value.trim()
+      );
+      previewBox.textContent = JSON.stringify({ embeds: [embed] }, null, 2);
+      return embed;
+    }
+
+    generateBtn.addEventListener('click', () => {
+      updatePreview();
+    });
+
+    copyBtn.addEventListener('click', () => {
+      const jsonText = previewBox.textContent;
+      if (!jsonText) {
+        alert('Generate JSON first!');
+        return;
+      }
+      navigator.clipboard.writeText(jsonText).then(() => {
+        alert('Embed JSON copied to clipboard!');
+      }).catch(() => {
+        alert('Failed to copy JSON.');
+      });
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      const jsonText = previewBox.textContent;
+      if (!jsonText) {
+        alert('Generate JSON first!');
+        return;
+      }
+      const blob = new Blob([jsonText], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'embed.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
