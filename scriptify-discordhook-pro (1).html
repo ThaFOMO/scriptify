@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Scriptify Webhook Builder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0d1117;
+      color: #c9d1d9;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #161b22;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #30363d;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header-left img {
+      height: 40px;
+    }
+    .header-left h1 {
+      font-size: 1.5em;
+      color: #58a6ff;
+      margin: 0;
+    }
+    .header-buttons a {
+      margin-left: 10px;
+      text-decoration: none;
+      background: #238636;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: background 0.2s ease;
+    }
+    .header-buttons a:hover {
+      background: #2ea043;
+    }
+    main {
+      padding: 30px;
+      max-width: 800px;
+      margin: auto;
+    }
+    label {
+      margin-top: 20px;
+      display: block;
+      font-weight: 600;
+      color: #f0f6fc;
+    }
+    input, textarea, button {
+      background: #161b22;
+      color: #c9d1d9;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 10px;
+      margin-top: 5px;
+      width: 100%;
+      font-size: 1em;
+    }
+    input[type="color"] {
+      padding: 2px;
+      height: 40px;
+      width: 100px;
+    }
+    textarea {
+      resize: vertical;
+      height: 100px;
+    }
+    button {
+      background-color: #238636;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .embed-preview {
+      background: #1c1f26;
+      border-left: 4px solid #5865f2;
+      padding: 15px;
+      margin-top: 30px;
+      border-radius: 5px;
+    }
+    .embed-preview strong {
+      font-size: 1.2em;
+      display: block;
+      margin-bottom: 10px;
+    }
+    .embed-preview img {
+      max-width: 100%;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #8b949e;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" alt="Logo">
+      <h1>Scriptify💻</h1>
+    </div>
+    <div class="header-buttons">
+      <a href="#">⭐ Premium</a>
+      <a href="#">💬 Support</a>
+      <a href="#">➕ Add to Server</a>
+    </div>
+  </header>
+  <main>
+    <label>Webhook URL</label>
+    <input type="text" id="webhookUrl" placeholder="https://discord.com/api/webhooks/..." />
+
+    <label>Embed Title</label>
+    <input type="text" id="embedTitle" placeholder="Embed title..." />
+
+    <label>Embed Description</label>
+    <textarea id="embedDesc" placeholder="Embed description..."></textarea>
+
+    <label>Embed Image URL</label>
+    <input type="text" id="embedImg" placeholder="https://example.com/image.png" />
+
+    <label>Embed Color</label>
+    <input type="color" id="colorPicker" value="#5865f2" />
+    <input type="text" id="embedColor" value="#5865f2" readonly />
+
+    <button onclick="sendWebhook()">Send to Discord</button>
+
+    <div class="embed-preview" id="preview">
+      <strong id="previewTitle"></strong>
+      <p id="previewDesc"></p>
+      <img id="previewImg" style="display:none;" />
+    </div>
+  </main>
+  <footer>Made with ❤️ by Scriptify</footer>
+
+  <script>
+    const titleInput = document.getElementById("embedTitle");
+    const descInput = document.getElementById("embedDesc");
+    const colorPicker = document.getElementById("colorPicker");
+    const embedColor = document.getElementById("embedColor");
+    const embedImg = document.getElementById("embedImg");
+    const previewImg = document.getElementById("previewImg");
+
+    function updatePreview() {
+      document.getElementById("previewTitle").innerText = titleInput.value;
+      document.getElementById("previewDesc").innerText = descInput.value;
+      document.getElementById("preview").style.borderLeftColor = embedColor.value;
+
+      if (embedImg.value.trim() !== "") {
+        previewImg.src = embedImg.value;
+        previewImg.style.display = "block";
+      } else {
+        previewImg.style.display = "none";
+      }
+    }
+
+    titleInput.addEventListener("input", updatePreview);
+    descInput.addEventListener("input", updatePreview);
+    embedImg.addEventListener("input", updatePreview);
+    colorPicker.addEventListener("input", () => {
+      embedColor.value = colorPicker.value;
+      updatePreview();
+    });
+
+    function sendWebhook() {
+      const url = document.getElementById("webhookUrl").value;
+      const title = titleInput.value;
+      const description = descInput.value;
+      const imageUrl = embedImg.value;
+      const color = parseInt(embedColor.value.replace("#", ""), 16);
+
+      const embed = {
+        title: title,
+        description: description,
+        color: color
+      };
+
+      if (imageUrl.trim() !== "") {
+        embed.image = { url: imageUrl };
+      }
+
+      fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ embeds: [embed] })
+      })
+      .then(res => {
+        if (res.ok) alert("✅ Message sent!");
+        else alert("❌ Failed to send: " + res.status);
+      });
+    }
+  </script>
+</body>
+</html>
